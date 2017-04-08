@@ -43,13 +43,13 @@ At a minimum, please include:
 
 ## Feature requests
 
-For feature requests, please raise them on the [issues page](https://github.com/yantrashala/loopback-ssl/issues/) with label "enhancement".
+For feature requests, please raise them on the [issues page](https://github.com/yantrashala/mandrake.ai/issues) with label "enhancement".
 
 ## Pull-Requests
 
 If you want to raise a pull-request with a new feature, or a refactoring
 of existing code, it may well get rejected if you haven't discussed it on
-the [issues page](https://github.com/yantrashala/loopback-ssl/issues/) first.
+the [issues page](https://github.com/yantrashala/mandrake.ai/issues) first.
 
 ### Coding standards
 
