@@ -13,15 +13,8 @@
   },
   "keywords": [],
   "author": "Siddhartha Lahiri",
-  "contributors": [
-    {
-      "name": "Nick O'Leary"
-    },
-    {
-      "name": "Dave Conway-Jones"
-    }
-  ],
-  "license": "MIT",
+  "contributors": [],
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/yantrashala/mandrake.ai/issues"
   },
