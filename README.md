@@ -5,25 +5,20 @@
 ## Developers
 If you want to run the latest code from git, here's how to get started:
 
-1. Clone the code:
-        git clone https://github.com/yantrashala/mandrake.ai.git
-        cd mandrake.ai
-
-2. Install the mandrake.ai dependencies
-        npm install
-
-4. Run
-        npm start
-
+- Clone the code:
+  - git clone https://github.com/yantrashala/mandrake.ai.git
+  - cd mandrake.ai
+- Install the mandrake.ai dependencies
+  - npm install
+- Run
+  - npm start
 
 # Contributing to Yantrashala/mandrake.ai
 
 We welcome contributions, but request you follow these guidelines.
-
  - [Raising issues](#raising-issues)
  - [Feature requests](#feature-requests)
  - [Pull-Requests](#pull-requests)
-   - [Contributor License Agreement](#contributor-license-agreement)
 
 This project adheres to the [Contributor Covenant 1.4](http://contributor-covenant.org/version/1/4/).
 By participating, you are expected to uphold this code. Please report unacceptable
