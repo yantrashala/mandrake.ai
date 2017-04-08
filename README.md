@@ -1,5 +1,5 @@
 # mandrake.ai - Open Source Chatbot Platform
-
+[![Build Status](https://travis-ci.org/yantrashala/mandrake.ai.svg?branch=master)](https://travis-ci.org/yantrashala/mandrake.ai)
 
 
 ## Developers
