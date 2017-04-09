@@ -1,9 +1,13 @@
 <script type="text/javascript">
-    RED.nodes.registerType('slack-controller',{
+    RED.nodes.registerType('slack-controller', {
         category: 'config',
         defaults: {
-            name: {value: ""},
-            bot_token: {value: ""}
+            name: {
+                value: ""
+            },
+            bot_token: {
+                value: ""
+            }
         },
         label: function() {
             return this.name;

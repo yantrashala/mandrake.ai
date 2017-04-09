@@ -1,4 +1,3 @@
-
 <script type="text/x-red" data-template-name="slack-reply">
     <div class="form-row">
         <label for="node-input-slack"> Slack Token</label>
@@ -12,21 +11,26 @@
 
 <script type="text/x-red" data-help-name="slack-reply">
     <h3>About</h3>
-    <p>Use this node to reply to direct messages and mentions. This node should be used at the start of a node</p>
+    <p>Use this node to listen to direct messages and mentions. This node should be used at the start of a node</p>
     <h3>Use</h3>
     <p>To use configure the form with the Slack bot token.</p>
 </script>
 
 <script type="text/javascript">
     RED.nodes.registerType('slack-reply', {
-        category: 'mandrake',
+        category: 'chat',
         defaults: {
-            slack: {value:"", type:"slack-controller"},
-            name: {value:""}
+            slack: {
+                value: "",
+                type: "slack-controller"
+            },
+            name: {
+                value: ""
+            }
         },
-        inputs:1,               // set the number of inputs - only 0 or 1
-        outputs:0,              // set the number of outputs - 0 to n
-        icon: "slack.png",     // saved in  icons/myicon.png
+        inputs: 1, // set the number of inputs - only 0 or 1
+        outputs: 0, // set the number of outputs - 0 to n
+        icon: "slack.png", // saved in  icons/myicon.png
         color: "#EAA820",
         align: 'right',
         label: function() {
