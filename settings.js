@@ -2,6 +2,7 @@
 
 var path = require("path");
 var when = require("when");
+console.log(path.join(__dirname, "nodes"));
 var settings = module.exports = {
     uiPort: process.env.PORT || 1880,
     mqttReconnectTime: 15000,
@@ -40,7 +41,6 @@ var settings = module.exports = {
         'advanced'],
     autoInstallModules: false,
     httpAdminRoot: '/admin',
-    nodesDir: './nodes',
     httpStatic: path.join(__dirname,"public"),
     functionGlobalContext: { },
     flowFile: 'flows.json',
@@ -50,10 +50,10 @@ var settings = module.exports = {
     logging: {
         console: {
             level: "debug",
-            metrics: true,
-            audit: true
+            metrics: false,
+            audit: false
         }
-    }
+    },
     editorTheme: {
         page: {
             title: "mandrake.ai"
@@ -63,7 +63,6 @@ var settings = module.exports = {
         }
     },
 }
-
 
 if (process.env.NODE_RED_USERNAME && process.env.NODE_RED_PASSWORD) {
     settings.adminAuth = {

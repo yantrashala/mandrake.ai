@@ -1,0 +1,44 @@
+<script type="text/x-red" data-template-name="slack-listen">
+    <div class="form-row">
+        <label for="node-input-slack"> Slack Token</label>
+        <input type="text" id="node-input-slack">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name of this Node">
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="slack-listen">
+    <h3>About</h3>
+    <p>Likes the status specified in the ID parameter as the authenticating user. Returns the liked status when successful</p>
+    <h3>Use</h3>
+    <p>To use either configure the form or pass the tweet id as a parameter inside the payload object ({"tweet":"1234567890"}).
+    </p>
+    <p>For more information on these parameters see the twitter API:</p>
+    <p><a href="https://dev.twitter.com/rest/reference/post/favorites/create" target="_blank">favorites/create</a></p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('slack-listen', {
+        category: 'chat',
+        defaults: {
+            slack: {
+                value: "",
+                type: "slack-controller"
+            },
+            name: {
+                value: ""
+            }
+        },
+        inputs: 0, // set the number of inputs - only 0 or 1
+        outputs: 1, // set the number of outputs - 0 to n
+        icon: "slack.png", // saved in  icons/myicon.png
+        color: "#EAA820",
+        label: function() {
+            return this.name || "Slack Listen";
+        },
+        paletteLabel: "Slack Listen"
+    });
+</script>
