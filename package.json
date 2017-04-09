@@ -19,6 +19,7 @@
     "url": "https://github.com/yantrashala/mandrake.ai/issues"
   },
   "dependencies": {
+    "botkit": "^0.5.2",
     "node-red": "0.16.2",
     "when": "3.7.8"
   },
