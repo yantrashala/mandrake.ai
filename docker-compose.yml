@@ -1,0 +1,22 @@
+version: '2'
+services:
+  web:
+    user: root
+    build: .
+    ports:
+      - "1880:1880"
+    command: ["npm", "start"]
+    container_name: mandrake-ai
+    volumes:
+       - "./data:/data"
+    depends_on:
+      - mosquitto
+    links:
+      - mosquitto
+
+  mosquitto:
+    image: "eclipse-mosquitto:1.4.8"
+    container_name: mosquitto-server
+    ports:
+      - "1883:1883"
+      - "9001:9001"
