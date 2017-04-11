@@ -1,4 +1,4 @@
-FROM node:7-alpine
+FROM node:6-alpine
 
 MAINTAINER Siddhartha Lahiri "siddhartha.lahiri@gmail.com"
 
@@ -11,7 +11,7 @@ RUN apk add --update \
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
 
-EXPOSE 1880
+EXPOSE 9000
 
 # Home directory for Mandrake-AI application source code.
 RUN mkdir /home/mandrake-ai

@@ -4,7 +4,7 @@ services:
     user: root
     build: .
     ports:
-      - "1880:1880"
+      - "9000:9000"
     command: ["npm", "start"]
     container_name: mandrake-ai
     volumes:

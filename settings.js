@@ -4,12 +4,13 @@ var path = require("path");
 var when = require("when");
 console.log(path.join(__dirname, "nodes"));
 var settings = module.exports = {
-    uiPort: process.env.PORT || 1880,
+    uiPort: process.env.PORT || 9000,
     mqttReconnectTime: 15000,
     serialReconnectTime: 15000,
     debugMaxLength: 10000000,
     debugUseColors: true,
     nodesDir: path.join(__dirname, "nodes"),
+    uiHost: "0.0.0.0",
     nodesExcludes:[
         '66-mongodb.js',
         '75-exec.js',
