@@ -1,0 +1,29 @@
+FROM python:2.7-slim
+
+ENV RASA_NLU_DOCKER="YES" \
+    RASA_NLU_HOME=/app \
+    RASA_NLU_PYTHON_PACKAGES=/usr/local/lib/python2.7/dist-packages
+
+VOLUME ["${RASA_NLU_PYTHON_PACKAGES}"]
+
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+  build-essential \
+  git-core && \
+  apt-get clean
+
+RUN git clone https://github.com/golastmile/rasa_nlu.git
+
+RUN cp -avr /rasa_nlu /app
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+WORKDIR ${RASA_NLU_HOME}
+
+RUN pip install -r requirements.txt
+
+RUN python setup.py install
+
+EXPOSE 5000
+
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["help"]

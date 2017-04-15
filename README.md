@@ -1,6 +1,28 @@
 # mandrake.ai - Open Source Chatbot Platform
 [![Build Status](https://travis-ci.org/yantrashala/mandrake.ai.svg?branch=master)](https://travis-ci.org/yantrashala/mandrake.ai)
 
+## Setup
+
+### Docker
+[Docker](https://www.docker.com/) is required to build and start mandrake. Click here for [setup instructions](https://docs.docker.com/engine/installation/)
+
+#### Build images
+```
+docker-compose build
+```
+
+#### Start servers
+```
+docker-compose up
+```
+
+#### Test URLs
+- docker-ip: ```docker-machine ip```
+- mandrake: http://docker-ip:9000/admin
+- consul: http://docker-ip:8500/ui
+- rasa: ```curl http://docker-ip:5000/parse?q=hello```
+
+[Win/Mac]: For the ports to be accessible on localhost, add port-forwarding in virtualbox.
 
 ## Developers
 If you want to run the latest code from git, here's how to get started:
