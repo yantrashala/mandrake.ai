@@ -4,6 +4,7 @@
 ## Setup
 
 ### Docker
+[Docker](https://www.docker.com/) is required to build and start mandrake. Click here for [setup instructions](https://docs.docker.com/engine/installation/)
 
 #### Build images
 ```
@@ -16,10 +17,10 @@ docker-compose up
 ```
 
 #### Test URLs
-- IP: docker-machine ip
-- mandrake: http://<IP>:9000/admin
-- consul: http://<IP>:8500/ui
-- rasa: http://<IP>:5000/parse?q=hello
+- docker-ip: ```docker-machine ip```
+- mandrake: http://docker-ip:9000/admin
+- consul: http://docker-ip:8500/ui
+- rasa: ```curl http://docker-ip:5000/parse?q=hello```
 
 [Win/Mac]: For the ports to be accessible on localhost, add port-forwarding in virtualbox.
 
