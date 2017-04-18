@@ -2,11 +2,9 @@ version: '2'
 
 services:
   mandrake-ai:
-    user: root
     build: .
     ports:
       - "9000:9000"
-    command: ["npm", "start"]
     container_name: mandrake-ai
     environment:
       - SERVICE_NAME=mandrake-ai
@@ -16,20 +14,11 @@ services:
       - mandrakenet
     depends_on:
       - mosquitto
+      - consul
+      - registrator
     links:
       - mosquitto
-
-  mandrake-rasa:
-    user: root
-    build: rasa/.
-    ports:
-      - "5000:5000"
-    command: ["start"]
-    container_name: mandrake-rasa
-    environment:
-      - SERVICE_NAME=mandrake-ai
-    networks:
-      - mandrakenet
+    restart: always
 
   mosquitto:
     image: "eclipse-mosquitto:1.4.8"
@@ -38,10 +27,14 @@ services:
       - SERVICE_NAME=mosquitto
     networks:
       - mandrakenet
+    depends_on:
+      - consul
+      - registrator
     ports:
       - "1883:1883"
       - "9001:9001"
       - "9883:9883"
+    restart: always
 
   consul:
     image:  gliderlabs/consul-server:latest
@@ -52,6 +45,7 @@ services:
       - mandrakenet
     ports:
       - 8500:8500
+    restart: always
 
   registrator:
     image: gliderlabs/registrator:latest
@@ -64,7 +58,11 @@ services:
       - consul
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
+    restart: always
 
 networks:
   mandrakenet:
     driver: bridge
+
+volumes:
+  flow:
