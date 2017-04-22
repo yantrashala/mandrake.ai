@@ -1,24 +1,44 @@
 version: '2'
-
 services:
-  mandrake-ai:
-    build: .
+
+  rasa:
+    build: ./rasa/.
+    container_name: mandrake-rasa
     ports:
-      - "9000:9000"
-    container_name: mandrake-ai
-    environment:
-      - SERVICE_NAME=mandrake-ai
+      - "5000:5000"
     volumes:
-       - "./data:/data"
+      - ./rasa/config/config.json:/app/config_mitie.json:rw
+      - ./rasa/config/train.json:/app/data/examples/rasa/demo-rasa.json
+      - ./rasa/models:/app/models
+    environment:
+      - SERVICE_NAME=mandrake-rasa
     networks:
       - mandrakenet
     depends_on:
+      - consul
+      - registrator
+    command: python -m rasa_nlu.server -c config_mitie.json --server_model_dirs="${RASA_MODEL}"
+
+  node-red:
+    user: root
+    build: .
+    ports:
+      - "9000:9000"
+    container_name: mandrake-node-red
+    environment:
+      - SERVICE_NAME=mandrake-node-red
+    volumes:
+       - "./data:/home/mandrake-ai/data"
+    depends_on:
+      - rasa
       - mosquitto
       - consul
       - registrator
-    links:
-      - mosquitto
-    restart: always
+    environment:
+      - SERVICE_NAME=node-red
+    networks:
+      - mandrakenet
+    command: ["npm", "start"]
 
   mosquitto:
     image: "eclipse-mosquitto:1.4.8"
@@ -27,25 +47,13 @@ services:
       - SERVICE_NAME=mosquitto
     networks:
       - mandrakenet
-    depends_on:
-      - consul
-      - registrator
     ports:
       - "1883:1883"
       - "9001:9001"
       - "9883:9883"
-    restart: always
-
-  consul:
-    image:  gliderlabs/consul-server:latest
-    command: "-bootstrap -client 0.0.0.0"
-    container_name: consul
-    hostname: consul
-    networks:
-      - mandrakenet
-    ports:
-      - 8500:8500
-    restart: always
+    depends_on:
+      - consul
+      - registrator
 
   registrator:
     image: gliderlabs/registrator:latest
@@ -58,11 +66,19 @@ services:
       - consul
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    restart: always
+
+  consul:
+    image:  gliderlabs/consul-server:latest
+    command: "-bootstrap -client 0.0.0.0"
+    environment:
+      - SERVICE_NAME=consul
+    container_name: consul
+    hostname: consul
+    networks:
+      - mandrakenet
+    ports:
+      - 8500:8500
 
 networks:
   mandrakenet:
     driver: bridge
-
-volumes:
-  flow:

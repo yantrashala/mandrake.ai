@@ -1,14 +1,32 @@
-FROM node:6
+FROM node:6-alpine
 
 MAINTAINER Siddhartha Lahiri "siddhartha.lahiri@gmail.com"
 
-VOLUME /data
+# Install Python.
+RUN apk add --update \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+  && pip install virtualenv \
+  && rm -rf /var/cache/apk/*
 
-RUN mkdir -p /usr/src/mandrake
-WORKDIR /usr/src/mandrake
-COPY . /usr/src/mandrake/
-
-RUN npm install
 EXPOSE 9000
 
-CMD ["npm", "start", "--", "--userDir", "/data"]
+# Home directory for Mandrake-AI application source code.
+RUN mkdir /home/mandrake-ai
+WORKDIR /home/mandrake-ai
+
+COPY . /home/mandrake-ai
+
+RUN addgroup mandrake-ai \
+    && adduser -h /home/mandrake-ai -s /bin/sh -D -G mandrake-ai mandrake-ai \
+    && mkdir /data \
+    && chown -R mandrake-ai:mandrake-ai /data \
+    && chown -R mandrake-ai:mandrake-ai /home/mandrake-ai
+
+USER mandrake-ai
+
+# Install app dependencies
+RUN npm config set loglevel warn
+RUN npm install --quiet --unsafe-perm
