@@ -17,7 +17,9 @@ docker-compose run rasa python -m rasa_nlu.train -c config_mitie.json
 ```
 
 #### Configure Training models
+```
 export RASA_MODEL=model_YYYYMMDD-HHMMSS
+```
 
 #### Start servers
 ```
