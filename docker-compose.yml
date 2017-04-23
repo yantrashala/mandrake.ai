@@ -8,16 +8,22 @@ services:
       - "5000:5000"
     volumes:
       - ./rasa/config/config.json:/app/config_mitie.json:rw
-      - ./rasa/config/train.json:/app/data/examples/rasa/demo-rasa.json
+      - ./rasa/config/train.json:/app/data/examples/rasa/demo-rasa.json:ro
       - ./rasa/models:/app/models
     environment:
       - SERVICE_NAME=mandrake-rasa
-    networks:
-      - mandrakenet
-    depends_on:
-      - consul
-      - registrator
     command: python -m rasa_nlu.server -c config_mitie.json --server_model_dirs="${RASA_MODEL}"
+
+  rasa-trainer:
+    build: ./rasa-trainer/.
+    container_name: mandrake-rasa-trainer
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./rasa/config/train.json:/app/train.json:rw
+    environment:
+      - SERVICE_NAME=mandrake-rasa-trainer
+    command: rasa-nlu-trainer -s /app/train.json -p 8080
 
   node-red:
     user: root
@@ -32,12 +38,8 @@ services:
     depends_on:
       - rasa
       - mosquitto
-      - consul
-      - registrator
     environment:
       - SERVICE_NAME=node-red
-    networks:
-      - mandrakenet
     command: ["npm", "start"]
 
   mosquitto:
@@ -45,40 +47,7 @@ services:
     container_name: mosquitto-server
     environment:
       - SERVICE_NAME=mosquitto
-    networks:
-      - mandrakenet
     ports:
       - "1883:1883"
       - "9001:9001"
       - "9883:9883"
-    depends_on:
-      - consul
-      - registrator
-
-  registrator:
-    image: gliderlabs/registrator:latest
-    command: "-internal consul://consul:8500"
-    container_name: registrator
-    hostname: registrator
-    networks:
-      - mandrakenet
-    depends_on:
-      - consul
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-
-  consul:
-    image:  gliderlabs/consul-server:latest
-    command: "-bootstrap -client 0.0.0.0"
-    environment:
-      - SERVICE_NAME=consul
-    container_name: consul
-    hostname: consul
-    networks:
-      - mandrakenet
-    ports:
-      - 8500:8500
-
-networks:
-  mandrakenet:
-    driver: bridge

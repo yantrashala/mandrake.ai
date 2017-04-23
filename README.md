@@ -36,7 +36,7 @@ curl -X "POST" "http://docker-ip:5000/parse" \
 
 - docker-ip: ```docker-machine ip```
 - mandrake: http://docker-ip:9000/admin
-- consul: http://docker-ip:8500/ui
+- rasa-trainer: http://docker-ip:8080
 
 [Win/Mac]: For the ports to be accessible on localhost, add port-forwarding in virtualbox.
 
