@@ -6,8 +6,13 @@
 ### Docker
 [Docker](https://www.docker.com/) is required to build and start mandrake. Click here for [setup instructions](https://docs.docker.com/engine/installation/)
 
+#### Checkout code
+```
+git clone https://github.com/yantrashala/mandrake.ai.git
+```
 #### Build Mandrake
 ```
+cd mandrake.ai
 docker-compose build
 ```
 
@@ -42,16 +47,6 @@ curl -X "POST" "http://docker-ip:5000/parse" \
 
 [Win/Mac]: For the ports to be accessible on localhost, add port-forwarding in virtualbox.
 
-## Developers
-If you want to run the latest code from git, here's how to get started:
-
-- Clone the code:
-  - git clone https://github.com/yantrashala/mandrake.ai.git
-  - cd mandrake.ai
-- Install the mandrake.ai dependencies
-  - npm install
-- Run
-  - npm start
 
 # Contributing to Yantrashala/mandrake.ai
 
