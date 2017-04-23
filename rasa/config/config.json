@@ -1,0 +1,9 @@
+{
+  "pipeline": "mitie",
+  "mitie_file": "/app/data/total_word_feature_extractor.dat",
+  "path" : "/app/models",
+  "data" : "/app/data/examples/rasa/demo-rasa.json",
+  "server_model_dirs":{
+    "default":"model_20170422-091917"
+  }
+}

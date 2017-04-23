@@ -26,10 +26,7 @@ RUN addgroup mandrake-ai \
     && chown -R mandrake-ai:mandrake-ai /home/mandrake-ai
 
 USER mandrake-ai
-VOLUME /data
 
 # Install app dependencies
 RUN npm config set loglevel warn
 RUN npm install --quiet --unsafe-perm
-
-CMD [ "npm", "start" ]

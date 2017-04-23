@@ -1,29 +1,30 @@
-FROM python:2.7-slim
+FROM python:2
 
-ENV RASA_NLU_DOCKER="YES" \
-    RASA_NLU_HOME=/app \
-    RASA_NLU_PYTHON_PACKAGES=/usr/local/lib/python2.7/dist-packages
+MAINTAINER Siddhartha Lahiri "siddhartha.lahiri@gmail.com"
 
-VOLUME ["${RASA_NLU_PYTHON_PACKAGES}"]
+ENV RASA_NLU_DOCKER="YES"
+ENV RASA_NLU_HOME=/app
+ENV RASA_NLU_PYTHON_PACKAGES=/usr/local/lib/python2.7/dist-packages
 
-RUN apt-get update -qq && apt-get install -y --no-install-recommends \
-  build-essential \
-  git-core && \
-  apt-get clean
-
+RUN mkdir -p /app
+RUN mkdir -p /usr/local/lib/python2.7/dist-packages
 RUN git clone https://github.com/golastmile/rasa_nlu.git
-
-RUN cp -avr /rasa_nlu /app
-
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN cp -r /rasa_nlu/* /app
 
 WORKDIR ${RASA_NLU_HOME}
+RUN mkdir "/${RASA_NLU_HOME}/models"
 
-RUN pip install -r requirements.txt
+RUN apt-get update -qq
+RUN apt-get install -y --no-install-recommends build-essential
+RUN apt-get install -y --no-install-recommends git-core
+RUN apt-get install -y --no-install-recommends curl
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /rasa_nlu
 
+RUN pip install -r "${RASA_NLU_HOME}/requirements.txt"
+RUN pip install -U spacy
+RUN pip install git+https://github.com/mit-nlp/MITIE.git
+RUN python -m spacy.en.download all
+RUN python -m rasa_nlu.download -p mitie
 RUN python setup.py install
 
 EXPOSE 5000
-
-ENTRYPOINT ["./entrypoint.sh"]
-CMD ["help"]

@@ -1,70 +1,53 @@
 version: '2'
-
 services:
-  mandrake-ai:
+
+  rasa:
+    build: ./rasa/.
+    container_name: mandrake-rasa
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./rasa/config/config.json:/app/config_mitie.json:rw
+      - ./rasa/config/train.json:/app/data/examples/rasa/demo-rasa.json:ro
+      - ./rasa/models:/app/models
+    environment:
+      - SERVICE_NAME=mandrake-rasa
+    command: python -m rasa_nlu.server -c config_mitie.json --server_model_dirs="${RASA_MODEL}"
+
+  rasa-trainer:
+    build: ./rasa-trainer/.
+    container_name: mandrake-rasa-trainer
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./rasa/config/train.json:/app/train.json:rw
+    environment:
+      - SERVICE_NAME=mandrake-rasa-trainer
+    command: rasa-nlu-trainer -s /app/train.json -p 8080
+
+  node-red:
     user: root
     build: .
     ports:
       - "9000:9000"
-    command: ["npm", "start"]
-    container_name: mandrake-ai
+    container_name: mandrake-node-red
     environment:
-      - SERVICE_NAME=mandrake-ai
+      - SERVICE_NAME=mandrake-node-red
     volumes:
-       - "./data:/data"
-    networks:
-      - mandrakenet
+       - "./data:/home/mandrake-ai/data"
     depends_on:
+      - rasa
       - mosquitto
-    links:
-      - mosquitto
-
-  mandrake-rasa:
-    user: root
-    build: rasa/.
-    ports:
-      - "5000:5000"
-    command: ["start"]
-    container_name: mandrake-rasa
     environment:
-      - SERVICE_NAME=mandrake-ai
-    networks:
-      - mandrakenet
+      - SERVICE_NAME=node-red
+    command: ["npm", "start"]
 
   mosquitto:
     image: "eclipse-mosquitto:1.4.8"
     container_name: mosquitto-server
     environment:
       - SERVICE_NAME=mosquitto
-    networks:
-      - mandrakenet
     ports:
       - "1883:1883"
       - "9001:9001"
       - "9883:9883"
-
-  consul:
-    image:  gliderlabs/consul-server:latest
-    command: "-bootstrap -client 0.0.0.0"
-    container_name: consul
-    hostname: consul
-    networks:
-      - mandrakenet
-    ports:
-      - 8500:8500
-
-  registrator:
-    image: gliderlabs/registrator:latest
-    command: "-internal consul://consul:8500"
-    container_name: registrator
-    hostname: registrator
-    networks:
-      - mandrakenet
-    depends_on:
-      - consul
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-
-networks:
-  mandrakenet:
-    driver: bridge

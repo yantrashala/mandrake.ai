@@ -6,21 +6,39 @@
 ### Docker
 [Docker](https://www.docker.com/) is required to build and start mandrake. Click here for [setup instructions](https://docs.docker.com/engine/installation/)
 
-#### Build images
+#### Build Mandrake
 ```
 docker-compose build
 ```
 
-#### Start servers
+#### Train models
 ```
-docker-compose up
+docker-compose run rasa python -m rasa_nlu.train -c config_mitie.json
 ```
 
-#### Test URLs
+#### Configure Training models
+```
+export RASA_MODEL=model_YYYYMMDD-HHMMSS
+```
+
+#### Start servers
+```
+docker-compose up -d
+```
+
+#### Test
+```
+## RASA_QUERY_POST
+curl -X "POST" "http://docker-ip:5000/parse" \
+     -H "Content-Type: text/plain; charset=utf-8" \
+     -d $'{
+  "q": "show me a mexican place in the centre"
+}'
+```
+
 - docker-ip: ```docker-machine ip```
 - mandrake: http://docker-ip:9000/admin
-- consul: http://docker-ip:8500/ui
-- rasa: ```curl http://docker-ip:5000/parse?q=hello```
+- rasa-trainer: http://docker-ip:8080
 
 [Win/Mac]: For the ports to be accessible on localhost, add port-forwarding in virtualbox.
 
