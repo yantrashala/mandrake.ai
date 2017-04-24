@@ -1,5 +1,5 @@
 # mandrake.ai - Open Source Chatbot Platform
-[![Build Status](https://travis-ci.org/yantrashala/mandrake.ai.svg?branch=master)](https://travis-ci.org/yantrashala/mandrake.ai) [![git.legal](https://git.legal/projects/3919/badge.svg?key=895c56942d4e8c44a3c5 "Number of libraries approved")](https://git.legal/projects/3919)
+[![Build Status](https://travis-ci.org/yantrashala/mandrake.ai.svg?branch=master)](https://travis-ci.org/yantrashala/mandrake.ai) [![git.legal](https://git.legal/projects/3919/badge.svg?key=895c56942d4e8c44a3c5 "Number of libraries approved")](https://git.legal/projects/3919) [![Gitter](https://img.shields.io/gitter/room/yantrashala/nw.js.svg)](https://gitter.im/yantrashala/chat)
 
 ## Setup
 
