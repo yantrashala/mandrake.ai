@@ -20,7 +20,7 @@ RUN mkdir /home/mandrake-ai
 WORKDIR /home/mandrake-ai
 
 RUN cp -a /tmp/node_modules /home/mandrake-ai
-COPY . /home/mandrake-ai
+ADD . /home/mandrake-ai
 
 RUN addgroup mandrake-ai \
     && adduser -h /home/mandrake-ai -s /bin/sh -D -G mandrake-ai mandrake-ai \
