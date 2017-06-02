@@ -11,12 +11,15 @@ RUN apk add --update \
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
 
-EXPOSE 9000
+RUN npm config set loglevel warn
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
 
 # Home directory for Mandrake-AI application source code.
 RUN mkdir /home/mandrake-ai
 WORKDIR /home/mandrake-ai
 
+RUN cp -a /tmp/node_modules /home/mandrake-ai
 COPY . /home/mandrake-ai
 
 RUN addgroup mandrake-ai \
@@ -26,7 +29,3 @@ RUN addgroup mandrake-ai \
     && chown -R mandrake-ai:mandrake-ai /home/mandrake-ai
 
 USER mandrake-ai
-
-# Install app dependencies
-RUN npm config set loglevel warn
-RUN npm install --quiet --unsafe-perm
