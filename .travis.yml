@@ -15,4 +15,11 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
+
+script:
   - docker-compose build
+  
+notifications:
+  email:
+    on_success: change
+    on_failure: change
