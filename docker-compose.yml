@@ -27,7 +27,7 @@ services:
 
   node-red:
     user: root
-    build: .
+    build: ./node-red/.
     ports:
       - "9000:9000"
     container_name: mandrake-node-red
