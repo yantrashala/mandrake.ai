@@ -15,7 +15,4 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
-  - docker-compose pull
   - docker-compose build
-  - docker-compose start
-  - docker ps
