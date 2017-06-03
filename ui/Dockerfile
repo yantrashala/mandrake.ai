@@ -2,22 +2,26 @@ FROM node:6-alpine
 
 MAINTAINER Siddhartha Lahiri "siddhartha.lahiri@gmail.com"
 
-# Install Python.
 RUN apk add --update \
-    python \
-    python-dev \
-    py-pip \
+    file \
+    libpng \
     build-base \
-  && pip install virtualenv \
+    libtool \
+    automake \
+    autoconf \
+    nasm \
+    libpng-dev \
+    bash \
   && rm -rf /var/cache/apk/*
 
-EXPOSE 9000
+RUN npm config set loglevel warn
 
 # Home directory for Mandrake-AI application source code.
 RUN mkdir /home/mandrake-ai
 WORKDIR /home/mandrake-ai
+ADD . /home/mandrake-ai
 
-COPY . /home/mandrake-ai
+RUN cd /home/mandrake-ai && npm install && npm run build && npm run build:dll
 
 RUN addgroup mandrake-ai \
     && adduser -h /home/mandrake-ai -s /bin/sh -D -G mandrake-ai mandrake-ai \
@@ -27,6 +31,6 @@ RUN addgroup mandrake-ai \
 
 USER mandrake-ai
 
-# Install app dependencies
-RUN npm config set loglevel warn
-RUN npm install --quiet --unsafe-perm
+EXPOSE 4000
+
+CMD npm start

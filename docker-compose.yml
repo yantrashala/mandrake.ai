@@ -1,7 +1,68 @@
 version: '2'
 services:
 
+  ambassador:
+    user: root
+    image: cpuguy83/docker-grand-ambassador
+    container_name: ambassador
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
+    command: "-name tyk_gateway -name tyk_dashboard"
+
+  tyk_gateway:
+    user: root
+    image: tykio/tyk-gateway:latest
+    container_name: tyk_gateway
+    depends_on:
+      - tyk_redis
+      - tyk_mongo
+      - ambassador
+    links:
+      - tyk_redis:redis
+      - tyk_mongo:mongo
+      - ambassador:tyk_dashboard
+    ports:
+      - "80:8080"
+      - "8080:8080"
+    volumes:
+      - ./tyk/tyk.conf:/opt/tyk-gateway/tyk.conf
+
+  tyk_dashboard:
+    user: root
+    image: tykio/tyk-dashboard:latest
+    container_name: tyk_dashboard
+    depends_on:
+      - tyk_redis
+      - tyk_mongo
+      - ambassador
+      - tyk_gateway
+    links:
+      - tyk_redis:redis
+      - tyk_mongo:mongo
+      - tyk_gateway:tyk_gateway
+      - ambassador:tyk_gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./tyk/tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
+
+  tyk_redis:
+    user: root
+    image: redis:latest
+    hostname: redis
+    container_name: tyk_redis
+
+  tyk_mongo:
+    user: root
+    image: mongo:latest
+    command: ["mongod", "--smallfiles"]
+    hostname: mongo
+    container_name: tyk_mongo
+    volumes:
+      - ./data/db:/data/db:rw
+
   rasa:
+    user: root
     build: ./rasa/.
     container_name: mandrake-rasa
     ports:
@@ -9,25 +70,30 @@ services:
     volumes:
       - ./rasa/config/config.json:/app/config_mitie.json:rw
       - ./rasa/config/train.json:/app/data/examples/rasa/demo-rasa.json:ro
-      - ./rasa/models:/app/models
+      - ./data/models:/app/models
     environment:
       - SERVICE_NAME=mandrake-rasa
     command: python -m rasa_nlu.server -c config_mitie.json --server_model_dirs="${RASA_MODEL}"
 
   rasa-trainer:
+    user: root
     build: ./rasa-trainer/.
     container_name: mandrake-rasa-trainer
     ports:
-      - "8080:8080"
+      - "9080:9080"
     volumes:
       - ./rasa/config/train.json:/app/train.json:rw
     environment:
       - SERVICE_NAME=mandrake-rasa-trainer
-    command: rasa-nlu-trainer -s /app/train.json -p 8080
+    links:
+      - rasa
+    depends_on:
+      - rasa
+    command: rasa-nlu-trainer -s /app/train.json -p 9080
 
   node-red:
     user: root
-    build: .
+    build: ./node-red/.
     ports:
       - "9000:9000"
     container_name: mandrake-node-red
@@ -38,11 +104,36 @@ services:
     depends_on:
       - rasa
       - mosquitto
+    links:
+      - rasa
+      - mosquitto
     environment:
       - SERVICE_NAME=node-red
     command: ["npm", "start"]
 
+  mandrake-ui:
+    user: root
+    build: ./ui/.
+    ports:
+      - "4000:4000"
+    container_name: mandrake-ui
+    environment:
+      - SERVICE_NAME=mandrake-ui
+    volumes:
+       - "./data:/home/mandrake-ui/data"
+    depends_on:
+      - rasa
+      - mosquitto
+    links:
+      - rasa
+      - mosquitto
+    environment:
+      - SERVICE_NAME=mandrake-ui
+      - PORT=4000
+    command: ["npm", "start"]
+
   mosquitto:
+    user: root
     image: "eclipse-mosquitto:1.4.8"
     container_name: mosquitto-server
     environment:

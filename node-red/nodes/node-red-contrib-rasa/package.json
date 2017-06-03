@@ -1,0 +1,14 @@
+{
+  "name": "node-red-contrib-rasa",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "dependencies": {
+  },
+	"keywords": [ "node-red" ],
+	"node-red": {
+		"nodes": {
+			"rasa-nlu": "rasa-nlu.js"
+		}
+	}
+}
