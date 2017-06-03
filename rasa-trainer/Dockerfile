@@ -7,4 +7,4 @@ RUN npm i -g rasa-nlu-trainer
 RUN mkdir -p /app
 WORKDIR /app
 
-EXPOSE 8080
+EXPOSE 9080
