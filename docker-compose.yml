@@ -4,6 +4,7 @@ services:
   ambassador:
     user: root
     image: cpuguy83/docker-grand-ambassador
+    restart: always
     container_name: ambassador
     volumes:
       - /var/run/docker.sock:/run/docker.sock
@@ -30,6 +31,7 @@ services:
   tyk_dashboard:
     user: root
     image: tykio/tyk-dashboard:latest
+    restart: always
     container_name: tyk_dashboard
     depends_on:
       - tyk_redis
@@ -50,20 +52,25 @@ services:
     user: root
     image: redis:latest
     hostname: redis
+    restart: always
     container_name: tyk_redis
 
   tyk_mongo:
     user: root
     image: mongo:latest
+    restart: always
     command: ["mongod", "--smallfiles"]
     hostname: mongo
     container_name: tyk_mongo
+    ports:
+      - "27017:27017"
     volumes:
       - ./data/db:/data/db:rw
 
   rasa:
     user: root
     build: ./rasa/.
+    restart: always
     container_name: mandrake-rasa
     ports:
       - "5000:5000"
@@ -78,6 +85,7 @@ services:
   rasa-trainer:
     user: root
     build: ./rasa-trainer/.
+    restart: always
     container_name: mandrake-rasa-trainer
     ports:
       - "9080:9080"
@@ -94,6 +102,7 @@ services:
   node-red:
     user: root
     build: ./node-red/.
+    restart: always
     ports:
       - "9000:9000"
     container_name: mandrake-node-red
@@ -111,29 +120,9 @@ services:
       - SERVICE_NAME=node-red
     command: ["npm", "start"]
 
-  mandrake-ui:
-    user: root
-    build: ./ui/.
-    ports:
-      - "4000:4000"
-    container_name: mandrake-ui
-    environment:
-      - SERVICE_NAME=mandrake-ui
-    volumes:
-       - "./data:/home/mandrake-ui/data"
-    depends_on:
-      - rasa
-      - mosquitto
-    links:
-      - rasa
-      - mosquitto
-    environment:
-      - SERVICE_NAME=mandrake-ui
-      - PORT=4000
-    command: ["npm", "start"]
-
   mosquitto:
     user: root
+    restart: always
     image: "eclipse-mosquitto:1.4.8"
     container_name: mosquitto-server
     environment:
@@ -142,3 +131,19 @@ services:
       - "1883:1883"
       - "9001:9001"
       - "9883:9883"
+
+  mandrake-connector:
+    user: root
+    build: ./connector/.
+    restart: always
+    container_name: bot-connector
+    depends_on:
+      - tyk_mongo
+    links:
+      - tyk_mongo:mongo
+    environment:
+      - SERVICE_NAME=bot-connector
+      - NODE_ENV=developemnt
+    ports:
+      - "6060:6060"
+    command: ["yarn", "start"]

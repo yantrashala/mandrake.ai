@@ -1,0 +1,24 @@
+version: '2'
+services:
+  
+  mandrake-ui:
+    user: root
+    build: ./ui/.
+    restart: always
+    ports:
+      - "4000:4000"
+    container_name: mandrake-ui
+    environment:
+      - SERVICE_NAME=mandrake-ui
+    volumes:
+       - "./data:/home/mandrake-ui/data"
+    depends_on:
+      - rasa
+      - mosquitto
+    links:
+      - rasa
+      - mosquitto
+    environment:
+      - SERVICE_NAME=mandrake-ui
+      - PORT=4000
+    command: ["npm", "start"]
