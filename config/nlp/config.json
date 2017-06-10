@@ -1,9 +1,12 @@
 {
+  "name": "mandrake_demo",
+  "language": "en",
   "pipeline": "mitie",
   "mitie_file": "/app/data/total_word_feature_extractor.dat",
   "path" : "/app/models",
   "data" : "/app/data/examples/rasa/demo-rasa.json",
+  "log_level": "DEBUG",
   "server_model_dirs":{
-    "default":"model_20170422-091917"
+    "default":"model_20170602-072928"
   }
 }

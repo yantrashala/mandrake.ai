@@ -1,6 +1,6 @@
 module.exports = {
   db: {
-    host: 'mongo',
+    host: 'mandrake_mongo',
     port: 27017,
     dbName: 'chatbot-connector-test',
   },

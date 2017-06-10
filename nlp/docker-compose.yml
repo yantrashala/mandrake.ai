@@ -1,0 +1,20 @@
+version: '2'
+services:
+
+  mandrake-nlp:
+    user: root
+    build: .
+    restart: always
+    container_name: mandrake-nlp
+    ports:
+      - "5000:8000"
+    volumes:
+      - ../config/nlp/config_mitie_sklearn.json:/app/config.json:rw
+      - ../data/trainer/mandrake_demo.json:/app/data/examples/rasa/demo-rasa.json:ro
+      - ../data/models:/app/models
+    environment:
+      - SERVICE_NAME=mandrake-nlp
+    command: gunicorn -w 4 --threads 12 -k gevent -b 0.0.0.0:8000 rasa_nlu.wsgi
+
+networks:
+  default:

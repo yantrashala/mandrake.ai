@@ -20,11 +20,13 @@ RUN apt-get install -y --no-install-recommends git-core
 RUN apt-get install -y --no-install-recommends curl
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /rasa_nlu
 
+RUN pip install gunicorn json-logging-py
 RUN pip install -r "${RASA_NLU_HOME}/requirements.txt"
 RUN pip install -U spacy
 RUN pip install git+https://github.com/mit-nlp/MITIE.git
 RUN python -m spacy.en.download all
 RUN python -m rasa_nlu.download -p mitie
+RUN pip install -U scikit-learn
 RUN python setup.py install
 
 EXPOSE 5000
