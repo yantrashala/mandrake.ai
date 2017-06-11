@@ -7,20 +7,18 @@ services:
   - docker
 
 before_install:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    sudo apt-get update
-    sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
-    docker-compose --version
-    sudo rm /usr/local/bin/docker-compose
-    curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    chmod +x docker-compose
-    sudo mv docker-compose /usr/local/bin
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-    docker-compose --version
-    docker-compose pull
-    docker-compose run mandrake-nlp python -m rasa_nlu.train -c config.json
-    echo "$TRAVIS_BRANCH"
-    fi
+  - sudo apt-get update
+  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+  - docker-compose --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker-compose --version
+  - docker-compose pull
+  - docker-compose run mandrake-nlp python -m rasa_nlu.train -c config.json
+  - echo "$TRAVIS_BRANCH"
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker-compose up -d
