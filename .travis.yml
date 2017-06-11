@@ -20,6 +20,4 @@ before_install:
   - docker-compose run mandrake-nlp python -m rasa_nlu.train -c config.json
   - echo "$TRAVIS_BRANCH"
 script:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker-compose up -d
-    fi
+  - docker-compose up -d
