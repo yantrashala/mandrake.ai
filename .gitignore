@@ -19,3 +19,4 @@ locales/zz-ZZ
 nodes/core/locales/zz-ZZ
 model_*
 data/db/*
+data/models/*

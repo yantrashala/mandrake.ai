@@ -1,149 +1,82 @@
 version: '2'
 services:
 
-  ambassador:
-    user: root
-    image: cpuguy83/docker-grand-ambassador
-    restart: always
-    container_name: ambassador
-    volumes:
-      - /var/run/docker.sock:/run/docker.sock
-    command: "-name tyk_gateway -name tyk_dashboard"
-
-  tyk_gateway:
-    user: root
-    image: tykio/tyk-gateway:latest
-    container_name: tyk_gateway
-    depends_on:
-      - tyk_redis
-      - tyk_mongo
-      - ambassador
-    links:
-      - tyk_redis:redis
-      - tyk_mongo:mongo
-      - ambassador:tyk_dashboard
-    ports:
-      - "80:8080"
-      - "8080:8080"
-    volumes:
-      - ./tyk/tyk.conf:/opt/tyk-gateway/tyk.conf
-
-  tyk_dashboard:
-    user: root
-    image: tykio/tyk-dashboard:latest
-    restart: always
-    container_name: tyk_dashboard
-    depends_on:
-      - tyk_redis
-      - tyk_mongo
-      - ambassador
-      - tyk_gateway
-    links:
-      - tyk_redis:redis
-      - tyk_mongo:mongo
-      - tyk_gateway:tyk_gateway
-      - ambassador:tyk_gateway
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./tyk/tyk_analytics.conf:/opt/tyk-dashboard/tyk_analytics.conf
-
-  tyk_redis:
-    user: root
-    image: redis:latest
-    hostname: redis
-    restart: always
-    container_name: tyk_redis
-
-  tyk_mongo:
+  mandrake-db:
     user: root
     image: mongo:latest
     restart: always
+    hostname: mandrake-db
     command: ["mongod", "--smallfiles"]
-    hostname: mongo
-    container_name: tyk_mongo
+    container_name: mandrake-db
     ports:
       - "27017:27017"
     volumes:
       - ./data/db:/data/db:rw
 
-  rasa:
+  mandrake-nlp:
     user: root
-    build: ./rasa/.
+    image: yantrashala/mandrake-nlp
     restart: always
-    container_name: mandrake-rasa
+    hostname: mandrake-nlp
+    container_name: mandrake-nlp
     ports:
       - "5000:5000"
     volumes:
-      - ./rasa/config/config.json:/app/config_mitie.json:rw
-      - ./rasa/config/train.json:/app/data/examples/rasa/demo-rasa.json:ro
+      - ./config/config-mandrake-ai.json:/app/config.json:rw
+      - ./config/mandrake-ai.json:/app/data/mandrake/mandrake-ai.json:ro
       - ./data/models:/app/models
     environment:
-      - SERVICE_NAME=mandrake-rasa
-    command: python -m rasa_nlu.server -c config_mitie.json --server_model_dirs="${RASA_MODEL}"
+      - SERVICE_NAME=mandrake-nlp
+    command: python -m rasa_nlu.server -c config.json
 
-  rasa-trainer:
+  mandrake-flow:
     user: root
-    build: ./rasa-trainer/.
+    image: yantrashala/mandrake-flow
     restart: always
-    container_name: mandrake-rasa-trainer
-    ports:
-      - "9080:9080"
-    volumes:
-      - ./rasa/config/train.json:/app/train.json:rw
-    environment:
-      - SERVICE_NAME=mandrake-rasa-trainer
-    links:
-      - rasa
-    depends_on:
-      - rasa
-    command: rasa-nlu-trainer -s /app/train.json -p 9080
-
-  node-red:
-    user: root
-    build: ./node-red/.
-    restart: always
+    hostname: mandrake-flow
     ports:
       - "9000:9000"
-    container_name: mandrake-node-red
+    container_name: mandrake-flow
     environment:
-      - SERVICE_NAME=mandrake-node-red
+      - SERVICE_NAME=mandrake-flow
     volumes:
        - "./data:/home/mandrake-ai/data"
     depends_on:
-      - rasa
-      - mosquitto
+      - mandrake-nlp
+      - mandrake-mq
     links:
-      - rasa
-      - mosquitto
+      - mandrake-nlp
+      - mandrake-mq
     environment:
-      - SERVICE_NAME=node-red
+      - SERVICE_NAME=mandrake-flow
     command: ["npm", "start"]
-
-  mosquitto:
-    user: root
-    restart: always
-    image: "eclipse-mosquitto:1.4.8"
-    container_name: mosquitto-server
-    environment:
-      - SERVICE_NAME=mosquitto
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-      - "9883:9883"
 
   mandrake-connector:
     user: root
-    build: ./connector/.
+    image: yantrashala/mandrake-connector
     restart: always
-    container_name: bot-connector
+    container_name: mandrake-connector
+    hostname: mandrake-connector
     depends_on:
-      - tyk_mongo
+      - mandrake-db
     links:
-      - tyk_mongo:mongo
+      - mandrake-db
     environment:
-      - SERVICE_NAME=bot-connector
+      - SERVICE_NAME=mandrake-connector
       - NODE_ENV=developemnt
     ports:
       - "6060:6060"
     command: ["yarn", "start"]
+
+  mandrake-mq:
+    user: root
+    restart: always
+    image: "eclipse-mosquitto:1.4.8"
+    container_name: mandrake-mq
+    hostname: mandrake-mq
+    environment:
+      - SERVICE_NAME=mandrake-mq
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+      - "9883:9883"
