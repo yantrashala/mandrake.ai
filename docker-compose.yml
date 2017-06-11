@@ -5,6 +5,7 @@ services:
     user: root
     image: mongo:latest
     restart: always
+    hostname: mandrake-db
     command: ["mongod", "--smallfiles"]
     container_name: mandrake-db
     ports:
@@ -14,23 +15,25 @@ services:
 
   mandrake-nlp:
     user: root
-    build: ./nlp/.
+    image: yantrashala/mandrake-nlp
     restart: always
+    hostname: mandrake-nlp
     container_name: mandrake-nlp
     ports:
       - "5000:5000"
     volumes:
-      - ./config/nlp/config.json:/app/config_mitie.json:rw
-      - ./config/nlp/train.json:/app/data/examples/rasa/demo-rasa.json:ro
+      - ./config/config-mandrake-ai.json:/app/config.json:rw
+      - ./config/mandrake-ai.json:/app/data/mandrake/mandrake-ai.json:ro
       - ./data/models:/app/models
     environment:
       - SERVICE_NAME=mandrake-nlp
-    command: python -m rasa_nlu.server -c config_mitie.json --server_model_dirs="${RASA_MODEL}"
+    command: python -m rasa_nlu.server -c config.json
 
   mandrake-flow:
     user: root
-    build: ./flow/.
+    image: yantrashala/mandrake-flow
     restart: always
+    hostname: mandrake-flow
     ports:
       - "9000:9000"
     container_name: mandrake-flow
@@ -50,9 +53,10 @@ services:
 
   mandrake-connector:
     user: root
-    build: ./connector/.
+    image: yantrashala/mandrake-connector
     restart: always
     container_name: mandrake-connector
+    hostname: mandrake-connector
     depends_on:
       - mandrake-db
     links:
@@ -69,6 +73,7 @@ services:
     restart: always
     image: "eclipse-mosquitto:1.4.8"
     container_name: mandrake-mq
+    hostname: mandrake-mq
     environment:
       - SERVICE_NAME=mandrake-mq
     ports:
