@@ -1,25 +1,31 @@
-# mandrake.ai - Open Source Chatbot Platform - NLP Engine
-[![Build Status](https://travis-ci.org/yantrashala/mandrake.ai.svg?branch=master)](https://travis-ci.org/yantrashala/mandrake.ai)  [![Gitter](https://img.shields.io/gitter/room/yantrashala/nw.js.svg)](https://gitter.im/yantrashala/chat)  [![GitHub issues](https://img.shields.io/github/issues/yantrashala/mandrake.ai.svg)](https://github.com/yantrashala/mandrake.ai)
+# mandrake.ai - Open source chatbot platform
 
-## Setup
+## Introduction
 
-### Docker
-[Docker](https://www.docker.com/) is required to build and start mandrake. Click here for [setup instructions](https://docs.docker.com/engine/installation/)
+Mandrake.ai is a development platform to build chatbots. The platform enables building dialogue flow visually and allows integration with a range of APIs and cognitive services out of the box. Mandrake.ai powered by **[node-red](https://github.com/node-red/node-red)**, open source visual programming tool and **[RASA NLU](https://github.com/RasaHQ/rasa_nlu)**, open source NLU framework.
 
-#### Checkout code
-```bash
-git clone https://github.com/yantrashala/mandrake-nlp.git
-```
-#### Build Mandrake
-```bash
-cd mandrake-nlp
-docker-compose build
-```
+![Introduction](assets/introduction.png)
 
-#### Start servers
-```bash
-docker-compose up -d
-```
+## Why mandrake.ai?
 
-## Contributing to Yantrashala/mandrake.ai
-[Contributing & Code of Conduct](CONTRIBUTING.md)
+Few questions below inspired inception of mandrake.ai
+
+- How do we easily design a conversational experience while keeping the platform completely configurable and programmable?
+- How can we build components which can be consumed independently by open source community without creating a dependency on the overall platform?
+
+## Introduction to Chatbots
+
+The following [article](https://www.linkedin.com/pulse/soon-we-have-bot-everything-siddhartha-lahiri) introduces key conceepts of Chatbots.
+
+## Notable Opensource used
+
+Below are some of the key components used in building mandrake.ai.
+- [Node Red](https://github.com/node-red/node-red)
+- [Rasa NLU](https://github.com/RasaHQ/rasa_nlu)
+- [bot-connector - Recast.ai](https://github.com/RecastAI/bot-connector)
+
+## Appendix
+ - [Contribution Guidelines](docs/CONTRIBUTING.md)
+ - [Code of conduct](docs/CONDUCR.md)
+ - License - [Apache 2.0](LICENSE)
+
