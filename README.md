@@ -1,39 +1,33 @@
 # mandrake.ai - Open source chatbot platform
 
-[![Build Status](https://travis-ci.org/yantrashala/mandrake.ai.svg?branch=master)](https://travis-ci.org/yantrashala/mandrake.ai)  [![Gitter](https://img.shields.io/gitter/room/yantrashala/nw.js.svg)](https://gitter.im/yantrashala/chat)  [![GitHub issues](https://img.shields.io/github/issues/yantrashala/mandrake.ai.svg)](https://github.com/yantrashala/mandrake.ai)
-
 ## Introduction
 
-Development platform to build chatbots for key messaging and voice based platforms. The platform emphasises on visually building
+Mandrake.ai is a development platform to build chatbots. The platform enables building dialogue flow visually and allows integration with a range of APIs and cognitive services out of the box. Mandrake.ai powered by **[node-red](https://github.com/node-red/node-red)**, open source visual programming tool and **[RASA NLU](https://github.com/RasaHQ/rasa_nlu)**, open source NLU framework.
 
-![](/assets/introduction.png)
+![Introduction](assets/introduction.png)
 
-## Setup
+## Why mandrake.ai?
 
-### Docker
+Few questions below inspired inception of mandrake.ai
 
-[Docker](https://www.docker.com/) is required to build and start mandrake. Click here for [setup instructions](https://docs.docker.com/engine/installation/)
+- How do we easily design a conversational experience while keeping the platform completely configurable and programmable?
+- How can we build components which can be consumed independently by open source community without creating a dependency on the overall platform?
 
-#### Checkout code
+## Introduction to Chatbots
 
-```bash
-git clone https://github.com/yantrashala/mandrake-nlp.git
-```
+The following [article](https://www.linkedin.com/pulse/soon-we-have-bot-everything-siddhartha-lahiri) introduces key conceepts of Chatbots.
 
-#### Build Mandrake
+## Key features
+- 
 
-```bash
-cd mandrake-nlp
-docker-compose build
-```
+### mandrake-flow
+### mandrake-nlp
+### mandrake-connector
 
-#### Start servers
+## Contribution Guidelines
 
-```bash
-docker-compose up -d
-```
+## Code of conduct
+(docs/CONTRIBUTING.md)[CONtributing]
 
-## Contributing to Yantrashala/mandrake.ai
-
-[Contributing & Code of Conduct](CONTRIBUTING.md)
-
+# License
+MIT
