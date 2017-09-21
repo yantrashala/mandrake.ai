@@ -4,9 +4,9 @@
 
 ## Introduction
 
-Development platform to build chatbots for key messaging and voice based platforms. The platform emphasises on visually building 
+Development platform to build chatbots for key messaging and voice based platforms. The platform emphasises on visually building
 
-![](/assets/png %281%29.png)
+![](/assets/introduction.png)
 
 ## Setup
 
