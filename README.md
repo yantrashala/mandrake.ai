@@ -1,4 +1,4 @@
-# mandrake.ai - Open source chatbot platform
+# Open source chatbot platform
 
 ## Introduction
 
@@ -26,6 +26,6 @@ Below are some of the key components used in building mandrake.ai.
 
 ## Appendix
  - [Contribution Guidelines](docs/CONTRIBUTING.md)
- - [Code of conduct](docs/CONDUCR.md)
+ - [Code of conduct](docs/CONDUCT.md)
  - License - [Apache 2.0](LICENSE)
 
