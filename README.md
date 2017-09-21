@@ -17,17 +17,15 @@ Few questions below inspired inception of mandrake.ai
 
 The following [article](https://www.linkedin.com/pulse/soon-we-have-bot-everything-siddhartha-lahiri) introduces key conceepts of Chatbots.
 
-## Key features
-- 
+## Notable Opensource used
 
-### mandrake-flow
-### mandrake-nlp
-### mandrake-connector
+Below are some of the key components used in building mandrake.ai.
+- [Node Red](https://github.com/node-red/node-red)
+- [Rasa NLU](https://github.com/RasaHQ/rasa_nlu)
+- [bot-connector - Recast.ai](https://github.com/RecastAI/bot-connector)
 
-## Contribution Guidelines
+## Appendix
+ - [Contribution Guidelines](docs/CONTRIBUTING.md)
+ - [Code of conduct](docs/CONDUCR.md)
+ - License - [Apache 2.0](LICENSE)
 
-## Code of conduct
-(docs/CONTRIBUTING.md)[CONtributing]
-
-# License
-MIT
